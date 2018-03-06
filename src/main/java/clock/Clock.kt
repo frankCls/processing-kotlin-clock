@@ -65,8 +65,6 @@ class SegmentCircle(private val center: PVector,
                     private val segmentsCount: Int,
                     private val applet: PApplet,
                     private val frameCounter: FrameCounter) {
-    private val frameToggler: FrameToggler = FrameToggler()
-    private val minuteframeCounter: FrameCounter = FrameCounter(0)
     private val segments: Array<Segment> = Array(segmentsCount,
             { i ->
                 val startAngle = PApplet.map(i.toFloat(), 0f, segmentsCount.toFloat(), 0f, PConstants.TWO_PI) - PConstants.HALF_PI
@@ -78,7 +76,6 @@ class SegmentCircle(private val center: PVector,
             })
 
     fun draw(timeunit: String) {
-        if (minuteframeCounter.count == 60) minuteframeCounter.reset() else minuteframeCounter.update()
         if (getTimeUnit(timeunit) > 0) {
             this.clearClockCircle(center, radius)
             frameCounter.reset()
@@ -95,12 +92,6 @@ class SegmentCircle(private val center: PVector,
         }
         clearClockCircle(center, radius - 20)
     }
-
-    private fun toggleIsOff() = !frameToggler.getValue()
-
-    private fun canbeDividedByFive(i: Int) = (i + 1) % 5 != 0
-
-    private fun isMinute(timeunit: String) = timeunit == "minute"
 
     private fun getTimeUnit(timeunit: String): Int {
         return (when (timeunit) {
