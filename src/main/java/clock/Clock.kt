@@ -66,36 +66,26 @@ class SegmentCircle(private val center: PVector,
                     private val applet: PApplet,
                     private val frameCounter: FrameCounter) {
     private val frameToggler: FrameToggler = FrameToggler()
-    private val minuteframeCounter :FrameCounter = FrameCounter(0)
+    private val minuteframeCounter: FrameCounter = FrameCounter(0)
     private val segments: Array<Segment> = Array(segmentsCount,
             { i ->
                 val startAngle = PApplet.map(i.toFloat(), 0f, segmentsCount.toFloat(), 0f, PConstants.TWO_PI) - PConstants.HALF_PI
                 val angleWidth = PConstants.TWO_PI / segmentsCount
                 val red = PApplet.map(i.toFloat(), 0f, segmentsCount.toFloat(), 0f, 255f)
                 val blue = PApplet.map(i.toFloat(), 0f, segmentsCount.toFloat(), 255f, 0f)
-                val yellow = PApplet.map(i.toFloat(), 0f, segmentsCount.toFloat(), 255f, 0f)
                 val color = Triple(red, 0f, blue)
                 Segment(center, radius, startAngle, startAngle + angleWidth, radius / 5, color, applet)
             })
 
     fun draw(timeunit: String) {
-        if(minuteframeCounter.count == 60) minuteframeCounter.reset() else minuteframeCounter.update()
+        if (minuteframeCounter.count == 60) minuteframeCounter.reset() else minuteframeCounter.update()
         if (getTimeUnit(timeunit) > 0) {
             this.clearClockCircle(center, radius)
             frameCounter.reset()
             for (i in 0 until getTimeUnit(timeunit)) {
-//                if (isMinute(timeunit)) {
-//                    if (canbeDividedByFive(i) || toggleIsOff()) {
-//                        val frameCount = minuteframeCounter.count
-//                        val red = PApplet.map(frameCount.toFloat(), 0f, 60f, 0f, segments[i].color.first)
-//                        val blue = PApplet.map(frameCount.toFloat(), 0f, 60f, 0f, segments[i].color.third)
-//                        segments[i].color = Triple(red, 0f, blue)
-                        segments[i].draw()
-//                    }
-//                } else segments[i].draw()
+                segments[i].draw()
             }
         }
-        //PApplet.println("$timeunit counter : ${getTimeUnit(timeunit)}")
         if (getTimeUnit(timeunit) == 0) {
             clearClockCircle(center, radius)
             for (i in frameCounter.count until segments.size) {
